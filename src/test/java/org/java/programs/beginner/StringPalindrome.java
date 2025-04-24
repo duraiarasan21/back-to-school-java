@@ -2,7 +2,7 @@ package org.java.programs.beginner;
 
 public class StringPalindrome {
 
-    static void reverse(String input){
+    static void reverseInbuildFunction(String input){
         input = input.toLowerCase();
         StringBuilder builder = new StringBuilder(input);
         builder.reverse();
@@ -14,8 +14,32 @@ public class StringPalindrome {
         }
     }
 
+    static void isPalindromeTwoPointer(String input){
+        input = input.toLowerCase();
+        int i = 0;
+        int j = input.length() - 1;
+        boolean result = true;
+
+        while(i < j){
+            if (input.charAt(i) != input.charAt(j)) {
+                result = false;
+                break;
+            }
+            i++;
+            j--;
+        }
+
+        if(result){
+            System.out.println("String is Palindrome");
+        } else {
+            System.out.println("String is not a Palindrome");
+        }
+
+
+    }
+
     public static void main(String[] args) {
-        reverse("Durai");
-        reverse("Madam");
+        reverseInbuildFunction("Durai");
+        isPalindromeTwoPointer("Madam");
     }
 }
