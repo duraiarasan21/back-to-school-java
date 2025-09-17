@@ -1,0 +1,5 @@
+101,Keyboard,25,ACTIVE
+105,Headphones,15,ACTIVE
+103,Monitor,10,ACTIVE
+107,Speaker,8,ACTIVE
+104,Webcam,5,ACTIVE
