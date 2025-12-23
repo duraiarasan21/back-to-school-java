@@ -1,121 +1,117 @@
 package org.java.programs.intermediate;
 
 import java.util.Stack;
+import java.util.Scanner;
 
-public class BrowserHistory {
+class BrowserHistory {
+    // Stores URLs to go back to.
+    private Stack<String> backStack;
+    // Stores URLs that were navigated back from (for forward navigation).
+    private Stack<String> forwardStack;
+    // The currently displayed URL.
+    private String currentURL;
 
-    interface BrowserHistoryInterface {
-        void visit(String url);
-        String back(int steps);
-        String forward(int steps);
+    /**
+     * Constructor to initialize the browser history with the home page.
+     */
+    public BrowserHistory(String homePage) {
+        // Initialize stacks and set the starting URL.
+        this.backStack = new Stack<>();
+        this.forwardStack = new Stack<>();
+        this.currentURL = homePage;
     }
 
-    public static class BrowserHistoryUsingStacks implements BrowserHistoryInterface{
+    /**
+     * Adds a new URL to the history.
+     */
+    public void visit(String url) {
+        // 1. Current URL is pushed to backStack (becomes the previous page)
+        backStack.push(currentURL);
 
-        Stack<String> backStack = new Stack<>();
-        Stack<String> forwardStack = new Stack<>();
+        // 2. New URL becomes the current URL
+        currentURL = url;
 
-        BrowserHistoryUsingStacks(String homepage) {
-            backStack.push(homepage);
-        }
-
-        @Override
-        public void visit(String url) {
-            while (!forwardStack.isEmpty()) {
-                forwardStack.pop();
-            }
-            backStack.push(url);
-        }
-
-        @Override
-        public String back(int steps) {
-            while (steps > 0 && backStack.size() > 1) {
-                forwardStack.push(backStack.pop());
-                steps--;
-            }
-            return backStack.peek();
-        }
-
-        @Override
-        public String forward(int steps) {
-            while (steps > 0 && !forwardStack.isEmpty()) {
-                backStack.push(forwardStack.pop());
-                steps--;
-            }
-            return backStack.peek();
-        }
+        // 3. forwardStack is cleared (cannot go forward after visiting a new page)
+        forwardStack.clear();
     }
 
-    public static class BrowserHistoryUsingDoublyLinkedList implements BrowserHistoryInterface{
-        static class Node {
-            String url;
-            Node prev;
-            Node next;
-
-            Node(String url) {
-                this.url = url;
-            }
+    /**
+     * Navigates to the previous URL.
+     */
+    public void goBack() {
+        if (backStack.isEmpty()) {
+            System.out.println("No history to go back to.");
+            return;
         }
 
-        Node current;
+        // 1. Current URL is pushed to forwardStack (to enable 'goForward')
+        forwardStack.push(currentURL);
 
-        BrowserHistoryUsingDoublyLinkedList(String homepage) {
-            current = new Node(homepage);
-        }
-
-        @Override
-        public void visit(String url) {
-            Node newNode = new Node(url);
-            current.next = newNode;
-            newNode.prev = current;
-            current = newNode;
-        }
-
-        @Override
-        public String back(int steps) {
-            while (steps > 0 && current.prev != null) {
-                current = current.prev;
-                steps--;
-            }
-            return current.url;
-        }
-
-        @Override
-        public String forward(int steps) {
-            while (steps > 0 && current.next != null) {
-                current = current.next;
-                steps--;
-            }
-            return current.url;
-        }
+        // 2. Top URL from backStack becomes the current URL
+        currentURL = backStack.pop();
     }
 
+    /**
+     * Navigates to the next URL.
+     */
+    public void goForward() {
+        if (forwardStack.isEmpty()) {
+            System.out.println("No forward history available.");
+            return;
+        }
 
+        // 1. Current URL is pushed to backStack
+        backStack.push(currentURL);
 
+        // 2. Top URL from forwardStack becomes the current URL
+        currentURL = forwardStack.pop();
+    }
 
-    void run(BrowserHistoryInterface browserHistoryInterface) {
-        browserHistoryInterface.visit("google.com");       // You are in "leetcode.com". Visit "google.com"
-        browserHistoryInterface.visit("facebook.com");     // You are in "google.com". Visit "facebook.com"
-        browserHistoryInterface.visit("youtube.com");      // You are in "facebook.com". Visit "youtube.com"
-        System.out.println(browserHistoryInterface.back(1)); // You are in "youtube.com", move back to "facebook.com" return "facebook.com"
-        System.out.println(browserHistoryInterface.back(1)); // You are in "facebook.com", move back to "google.com" return "google.com"
-        System.out.println(browserHistoryInterface.forward(1)); // You are in "google.com", move forward to "facebook.com" return "facebook.com"
-        browserHistoryInterface.visit("linkedin.com");     // You are in "facebook.com". Visit "linkedin.com"
-        System.out.println(browserHistoryInterface.forward(2)); // You are in "linkedin.com", you cannot move forward any steps.
-        System.out.println(browserHistoryInterface.back(2)); // You are in "linkedin.com", move back two steps to "google.com" return "google.com"
-        System.out.println(browserHistoryInterface.back(7)); // You are in "google.com", you can move back only one step to "leetcode.com". return "leetcode.com"
+    /**
+     * Retrieves the current URL.
+     */
+    public String getCurrentURL() {
+        return currentURL;
     }
 
 
     public static void main(String[] args) {
-        BrowserHistory browserHistory = new BrowserHistory();
-        String homepage = "leetcode.com";
-        System.out.println("Using Stacks:");
-        browserHistory.run(new BrowserHistoryUsingStacks(homepage));
-        System.out.println("Using Doubly Linked List:");
-        browserHistory.run(new BrowserHistoryUsingDoublyLinkedList(homepage));
+        // Initial setup as specified in the problem.
+        final String HOME_PAGE = "www.homepage.com";
+        BrowserHistory browserHistory = new BrowserHistory(HOME_PAGE);
+
+        Scanner scanner = new Scanner(System.in);
+
+        // Loop to process user input commands.
+        while (scanner.hasNextInt()) {
+            int option = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline after the integer input
+
+            if (option == 5) { // Exit
+                break;
+            }
+
+            switch (option) {
+                case 1: // Visit a page
+                    if (scanner.hasNextLine()) {
+                        String url = scanner.nextLine();
+                        browserHistory.visit(url);
+                    }
+                    break;
+                case 2: // Go forward
+                    browserHistory.goForward();
+                    break;
+                case 3: // Go back
+                    browserHistory.goBack();
+                    break;
+                case 4: // Print current URL
+                    System.out.println(browserHistory.getCurrentURL());
+                    break;
+                default:
+                    // For any unexpected input
+                    break;
+            }
+        }
+        scanner.close();
     }
 }
-
-
-
