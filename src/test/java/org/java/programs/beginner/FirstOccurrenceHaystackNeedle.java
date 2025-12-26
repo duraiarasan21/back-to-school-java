@@ -16,7 +16,7 @@ public class FirstOccurrenceHaystackNeedle {
         return -1;
     }
 
-    public int strStr(String haystack, String needle) {
+    public static int strStr(String haystack, String needle) {
         if(!haystack.isEmpty() && !needle.isEmpty()){
             return haystack.indexOf(needle);
         } else {
@@ -24,7 +24,7 @@ public class FirstOccurrenceHaystackNeedle {
         }
     }
 
-    public int strStrOptimized(String haystack, String needle) {
+    public static int strStrOptimized(String haystack, String needle) {
         if (needle.isEmpty()) {
             return 0;
         }
@@ -45,7 +45,7 @@ public class FirstOccurrenceHaystackNeedle {
     }
 
 
-    public void main(String[] args) {
+    public static void main(String[] args) {
         String haystack = "hello";
         String needle = "ll";
         int result = strStr(haystack, needle);
