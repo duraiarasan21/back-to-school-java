@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public class FindTheDifference {
 
-    public char findTheDifference(String s, String t) {
+    public static char findTheDifference(String s, String t) {
         int charCode = 0;
         for (char c : s.toCharArray()) {
             charCode ^= c;
@@ -29,7 +29,7 @@ public class FindTheDifference {
         return (char) charCode;
     }
 
-    public char findTheDifferenceUsingSum(String s, String t) {
+    public static char findTheDifferenceUsingSum(String s, String t) {
         int sumS = 0;
         int sumT = 0;
 
@@ -43,7 +43,7 @@ public class FindTheDifference {
         return (char) (sumT - sumS);
     }
 
-    public char findTheDifferenceUsingHashMap(String s, String t) {
+    public static char findTheDifferenceUsingHashMap(String s, String t) {
         HashMap<Character, Integer> charCount = new HashMap<>();
 
         for (char c : s.toCharArray()) {
@@ -62,14 +62,14 @@ public class FindTheDifference {
         FindTheDifference ftd = new FindTheDifference();
         String s1 = "abcd";
         String t1 = "abcde";
-        System.out.println("The difference character is: " + ftd.findTheDifference(s1, t1));
+        System.out.println("The difference character is: " + findTheDifference(s1, t1));
 
         String s2 = "";
         String t2 = "y";
-        System.out.println("The difference character is: " + ftd.findTheDifferenceUsingSum(s2, t2));
+        System.out.println("The difference character is: " + findTheDifferenceUsingSum(s2, t2));
 
         String s3 = "aabbcc";
         String t3 = "abcbcad";
-        System.out.println("The difference character is: " + ftd.findTheDifferenceUsingHashMap(s3, t3));
+        System.out.println("The difference character is: " + findTheDifferenceUsingHashMap(s3, t3));
     }
 }

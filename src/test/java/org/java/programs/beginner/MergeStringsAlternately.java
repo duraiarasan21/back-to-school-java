@@ -22,7 +22,7 @@ package org.java.programs.beginner;
 
 public class MergeStringsAlternately {
 
-    public String mergeAlternately(String word1, String word2) {
+    public static String mergeAlternately(String word1, String word2) {
         StringBuilder merged = new StringBuilder();
         int i = 0, j = 0;
 
@@ -45,7 +45,7 @@ public class MergeStringsAlternately {
         return merged.toString();
     }
 
-    public String mergeAlternatelyOptimized(String word1, String word2) {
+    public static String mergeAlternatelyOptimized(String word1, String word2) {
         StringBuilder merged = new StringBuilder();
         int maxLength = Math.max(word1.length(), word2.length());
 
@@ -64,15 +64,14 @@ public class MergeStringsAlternately {
 
 
     public static void main(String[] args) {
-        MergeStringsAlternately merger = new MergeStringsAlternately();
         String word1 = "abc";
         String word2 = "pqr";
-        String result = merger.mergeAlternately(word1, word2);
+        String result = mergeAlternately(word1, word2);
         System.out.println("Merged string: " + result); // Output: "apbqcr"
 
         String word3 = "ab";
         String word4 = "pqrskkkk";
-        String result2 = merger.mergeAlternatelyOptimized(word3, word4);
+        String result2 = mergeAlternatelyOptimized(word3, word4);
         System.out.println("Merged string: " + result2); // Output: "apbqrs"
 
     }
